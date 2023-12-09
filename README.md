@@ -4,8 +4,8 @@
 # 사용 Tools
 - FastAPI
 # 구현 목표
-- [ ] ToDo 목록 전송
-- [ ] ToDo 상세 내용 전송
+- [x] ToDo 목록 전송
+- [x] ToDo 상세 내용 전송
 - [ ] ToDo 작성 수행
 - [ ] ToDo 수정 수행
 - [ ] ToDo 삭제 수행
