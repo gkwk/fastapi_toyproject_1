@@ -14,3 +14,11 @@ router = APIRouter(
 def getUserDetail(userId : int, db: Session = Depends(get_db)):
     userDetail = user_crud.getUserDetail(db=db,userId=userId)
     return userDetail
+
+@router.get("/register")
+def registerUser(db: Session = Depends(get_db)):
+    return "register"
+
+@router.get("/login")
+def registerUser(db: Session = Depends(get_db)):
+    return "login"
