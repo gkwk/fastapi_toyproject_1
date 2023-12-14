@@ -11,10 +11,11 @@ router = APIRouter(
     prefix="/api/todo",
 )
 
-@router.get("/list/{userId}", response_model=list[todo_schema.TodoList])
-def getTodoList(userId : int, db: Session = Depends(get_db)):
-    todoList = todo_crud.getTodoList(db=db,userId=userId)
-    return todoList
+# @router.get("/list/{userId}", response_model=dict[str,int|list[todo_schema.TodoList]]) 
+@router.get("/list/{userId}", response_model=todo_schema.TotalTodoList)
+def getTodoList(userId : int, db: Session = Depends(get_db), page: int = 0, size: int = 10):
+    total, todoList = todo_crud.getTodoList(db=db,userId=userId,skip=page*size, limit=size)
+    return {"total" : total, "todoList" : todoList}
 
 @router.get("/detail/{userId}/{todoId}", response_model=list[todo_schema.TodoDetail])
 def getTodoDetail(userId : int, todoId : int, db: Session = Depends(get_db)):

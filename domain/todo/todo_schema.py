@@ -10,6 +10,10 @@ class TodoList(BaseModel):
     create_date : datetime.datetime
     is_finished : bool = False
     
+class TotalTodoList(BaseModel):
+    total : int
+    todoList : list[TodoList]
+    
 class TodoDetail(BaseModel):
     id: int
     user_id: int
