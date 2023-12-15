@@ -8,10 +8,11 @@ class User(Base):
 
     id = Column(Integer, primary_key=True)
     
-    name = Column(String, nullable=False)
+    name = Column(String, unique=True, nullable=False)
     password = Column(String, nullable=False)
     join_date = Column(DateTime, nullable=False)
     is_superuser = Column(Boolean, nullable=False, default=False)
+    email = Column(String, unique=True, nullable=False)
 
 class Todo(Base):
     __tablename__ = "todo"
