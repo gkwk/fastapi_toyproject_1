@@ -23,6 +23,12 @@ class UserCreate(BaseModel):
         if 'password1' in info.data and value != info.data['password1']:
             raise ValueError('비밀번호가 일치하지 않습니다')
         return value
+    
+class UserToken(BaseModel):
+    accessToken: str
+    tokenType: str
+    name: str
+    id: int
 
 class UserDetail(BaseModel):
     id: int
