@@ -14,6 +14,10 @@ def createUser(db: Session, userCreate : UserCreate):
     user = User(name = userCreate.name, password = passwordContext.hash(userCreate.password1), join_date = datetime.now(), email = userCreate.email)
     db.add(user)
     db.commit()
+
+def getUser(db: Session, name: str):
+    user = db.query(User).filter(User.name == name).first()
+    return user
     
 def getUserDetail(db: Session, userId):
     userDetail = db.query(User).filter_by(id = userId).all()
