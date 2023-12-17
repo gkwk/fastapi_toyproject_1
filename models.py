@@ -24,4 +24,5 @@ class Todo(Base):
     todo_name = Column(Text, nullable=False)
     text = Column(String, nullable=False, default="")
     create_date = Column(DateTime, nullable=False)
+    update_date = Column(DateTime, nullable=True)
     is_finished = Column(Boolean, nullable=False, default=False)
