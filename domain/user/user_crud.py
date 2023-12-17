@@ -19,6 +19,6 @@ def getUser(db: Session, name: str):
     user = db.query(User).filter(User.name == name).first()
     return user
     
-def getUserDetail(db: Session, userId):
-    userDetail = db.query(User).filter_by(id = userId).all()
+def getUserDetail(db: Session, userId, userName):
+    userDetail = db.query(User).filter_by(id = userId, name=userName).first()
     return userDetail
