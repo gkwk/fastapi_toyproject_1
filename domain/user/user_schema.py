@@ -25,7 +25,8 @@ class UserCreate(BaseModel):
         return value
     
 class UserToken(BaseModel):
-    accessToken: str
+    # 규칙에 따라 access_token은 access_token으로 두어야 한다.
+    access_token: str
     tokenType: str
     name: str
     id: int
