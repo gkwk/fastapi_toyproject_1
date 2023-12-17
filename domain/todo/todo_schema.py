@@ -8,6 +8,7 @@ class TodoList(BaseModel):
     
     todo_name : str
     create_date : datetime.datetime
+    update_date : datetime.datetime | None
     is_finished : bool = False
     
 class TotalTodoList(BaseModel):
@@ -21,6 +22,7 @@ class TodoDetail(BaseModel):
     todo_name : str
     text : str
     create_date : datetime.datetime
+    update_date : datetime.datetime | None
     is_finished : bool = False
 
 class CreateTodo(BaseModel):
@@ -32,3 +34,6 @@ class CreateTodo(BaseModel):
         if not value.strip():
             raise ValueError("값이 공백일 수 없습니다.")
         return value
+    
+class UpdateTodo(CreateTodo):
+    todoId : int
