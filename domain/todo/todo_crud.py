@@ -12,10 +12,10 @@ def getTodoList(db: Session, userId, skip: int = 0, limit: int = 10):
     return (total, todoList)
 
 def getTodoDetail(db: Session, userId, todoId):
-    todoDetail = db.query(Todo).filter_by(user_id = userId, id = todoId).all()
+    todoDetail = db.query(Todo).filter_by(user_id = userId, id = todoId).first()
     return todoDetail
 
-def createTodo(db: Session, schema :CreateTodo):
-    todo = Todo(user_id = schema.user_id, todo_name = schema.todo_name, text = schema.text, create_date = datetime.now())
+def createTodo(db: Session, schema :CreateTodo, userId : int):
+    todo = Todo(user_id = userId, todo_name = schema.todo_name, text = schema.text, create_date = datetime.now())
     db.add(todo)
     db.commit()
