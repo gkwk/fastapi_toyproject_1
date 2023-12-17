@@ -21,7 +21,7 @@ SECRET_KEY = getSettings().APP_JWT_SECRET_KEY
 ALGORITHM = "HS256"
 oauth2Scheme = OAuth2PasswordBearer(tokenUrl="/api/user/login")
 
-@router.post("/detail", response_model=user_schema.UserDetail)
+@router.get("/detail", response_model=user_schema.UserDetail)
 def getUserDetail(token = Depends(oauth2Scheme), db: Session = Depends(get_db)):
     credentialsException = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
