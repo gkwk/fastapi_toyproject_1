@@ -8,9 +8,7 @@ from domain.user import user_route
 # uvicorn main:{변수명} --reload ex) uvicorn main:app --reload
 app = FastAPI()
 
-origins = [
-    "*"
-]
+origins = ["*"]
 
 app.add_middleware(
     CORSMiddleware,
