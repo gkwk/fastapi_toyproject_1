@@ -13,6 +13,10 @@
 - [x] 로그인 JWT 토큰 전송
 - [x] JWT 토큰 검증 (라이브러리)
 # 실행방법
+- .env파일 생성 및 아래의 변수 추가
+```
+APP_JWT_SECRET_KEY = (64자로 된 임의의 문자열)
+```
 - 터미널에서 아래의 명령어 입력
 ```bash
 alembic init migrations
