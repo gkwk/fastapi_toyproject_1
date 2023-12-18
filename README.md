@@ -6,12 +6,12 @@
 # 구현 목표
 - [x] ToDo 목록 전송
 - [x] ToDo 상세 내용 전송
-- [ ] ToDo 작성 수행
-- [ ] ToDo 수정 수행
-- [ ] ToDo 삭제 수행
-- [ ] 회원 가입 수행
-- [ ] 로그인 JWT 토큰 전송
-- [ ] JWT 토큰 검증
+- [x] ToDo 작성 수행
+- [x] ToDo 수정 수행
+- [x] ToDo 삭제 수행
+- [x] 회원 가입 수행
+- [x] 로그인 JWT 토큰 전송
+- [x] JWT 토큰 검증 (라이브러리)
 # 실행방법
 - 터미널에서 아래의 명령어 입력
 ```bash
@@ -19,7 +19,7 @@ alembic init migrations
 ```
 - `./alembic.ini` 에서 `sqlalchemy.url`를 아래와 같이 변경
 ```
-sqlalchemy.url = sqlite:///./myapi.db
+sqlalchemy.url = sqlite:///./todo.sqlite
 ```
 - `./migrations/env.py` 에서 아래의 내용 추가
 ```
