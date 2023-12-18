@@ -37,3 +37,7 @@ class CreateTodo(BaseModel):
     
 class UpdateTodo(CreateTodo):
     todoId : int
+    is_finished : bool = False
+    
+class DeleteTodo(BaseModel):
+    todoId: int
