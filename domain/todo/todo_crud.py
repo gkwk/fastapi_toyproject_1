@@ -2,7 +2,7 @@ from sqlalchemy.orm import Session
 from datetime import datetime
 
 from models import Todo
-from domain.todo.todo_schema import CreateTodo, UpdateTodo
+from domain.todo.todo_schema import CreateTodo, UpdateTodo, DeleteTodo
 
 
 def getTodoList(db: Session, userId, skip: int = 0, limit: int = 10):
@@ -25,4 +25,8 @@ def updateTodo(db: Session, todo: Todo, schema: UpdateTodo):
     todo.text = schema.text
     todo.update_date = datetime.now()
     db.add(todo)
+    db.commit()
+    
+def deleteTodo(db: Session, todo: Todo, schema: DeleteTodo):
+    db.delete(todo)
     db.commit()
