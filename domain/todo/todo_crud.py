@@ -23,6 +23,7 @@ def createTodo(db: Session, schema :CreateTodo, userId : int):
 def updateTodo(db: Session, todo: Todo, schema: UpdateTodo):
     todo.todo_name = schema.todo_name
     todo.text = schema.text
+    todo.is_finished = schema.is_finished
     todo.update_date = datetime.now()
     db.add(todo)
     db.commit()
