@@ -7,7 +7,7 @@ from jose import jwt, JWTError
 from database import get_db
 from models import Todo, User
 from domain.todo import todo_schema, todo_crud
-from domain.todo.todo_schema import CreateTodo, UpdateTodo
+from domain.todo.todo_schema import CreateTodo, UpdateTodo, DeleteTodo
 from config import getSettings
 
 router = APIRouter(
@@ -29,13 +29,13 @@ def getTodoList(token = Depends(oauth2Scheme), db: Session = Depends(get_db), pa
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         name: str = payload.get("name")
-        id: int = payload.get("userId")
-        if (name is None) or (id is None):
+        userId: int = payload.get("userId")
+        if (name is None) or (userId is None):
             raise credentialsException
     except JWTError:
         raise credentialsException
     else:
-        total, todoList = todo_crud.getTodoList(db=db,userId=id,skip=page*size, limit=size)
+        total, todoList = todo_crud.getTodoList(db=db,userId=userId,skip=page*size, limit=size)
         if todoList is None:
             raise credentialsException
     
@@ -51,13 +51,13 @@ def getTodoDetail1(todoId : int, token = Depends(oauth2Scheme), db: Session = De
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         name: str = payload.get("name")
-        id: int = payload.get("userId")
-        if (name is None) or (id is None):
+        userId: int = payload.get("userId")
+        if (name is None) or (userId is None):
             raise credentialsException
     except JWTError:
         raise credentialsException
     else:
-        todoDetail = todo_crud.getTodoDetail(db=db,userId=id,todoId=todoId)
+        todoDetail = todo_crud.getTodoDetail(db=db,userId=userId,todoId=todoId)
         if todoDetail is None:
             raise credentialsException
     
@@ -73,14 +73,14 @@ def createTodo(schema :CreateTodo, token = Depends(oauth2Scheme),  db: Session =
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         name: str = payload.get("name")
-        id: int = payload.get("userId")
-        if (name is None) or (id is None):
+        userId: int = payload.get("userId")
+        if (name is None) or (userId is None):
             raise credentialsException
     except JWTError:
         raise credentialsException
     else:
-        if db.query(User).filter_by(id = id).count() == 1:
-            todo_crud.createTodo(db=db, schema=schema, userId=id)
+        if db.query(User).filter_by(id = userId).count() == 1:
+            todo_crud.createTodo(db=db, schema=schema, userId=userId)
         else:
             raise HTTPException(status_code=404, detail="유저가 존재하지 않습니다.")
         
@@ -94,13 +94,34 @@ def updateTodo(schema: UpdateTodo, token = Depends(oauth2Scheme), db: Session = 
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         name: str = payload.get("name")
-        id: int = payload.get("userId")
-        if (name is None) or (id is None):
+        userId: int = payload.get("userId")
+        if (name is None) or (userId is None):
             raise credentialsException
     except JWTError:
         raise credentialsException
     else:
-        todoDetail = todo_crud.getTodoDetail(db=db,userId=id,todoId=schema.todoId)
+        todoDetail = todo_crud.getTodoDetail(db=db,userId=userId,todoId=schema.todoId)
         if todoDetail is None:
             raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="데이터를 찾을수 없습니다.")
         todo_crud.updateTodo(db=db,todo=todoDetail,schema=schema)
+        
+@router.delete("/delete", status_code=status.HTTP_204_NO_CONTENT)
+def updateTodo(schema: DeleteTodo, token = Depends(oauth2Scheme), db: Session = Depends(get_db)):
+    credentialsException = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="토큰이 유효하지 않습니다.",
+        headers={"WWW-Authenticate": "Bearer"}
+    )
+    try:
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        name: str = payload.get("name")
+        userId: int = payload.get("userId")
+        if (name is None) or (userId is None):
+            raise credentialsException
+    except JWTError:
+        raise credentialsException
+    else:
+        todoDetail = todo_crud.getTodoDetail(db=db,userId=userId,todoId=schema.todoId)
+        if todoDetail is None:
+            raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="데이터를 찾을수 없습니다.")
+        todo_crud.deleteTodo(db=db,todo=todoDetail,schema=schema)
