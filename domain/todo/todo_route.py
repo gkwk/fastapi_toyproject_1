@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from starlette import status
 from jose import jwt, JWTError
 
-from database import GetDataBase
+from database import get_data_base
 from models import Todo, User
 from domain.todo import todo_schema, todo_crud
 from domain.todo.todo_schema import CreateTodo, UpdateTodo, DeleteTodo
@@ -23,7 +23,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/api/user/login")
 @router.get("/list", response_model=todo_schema.TotalTodoList)
 def getTodoList(
     token=Depends(oauth2_scheme),
-    data_base: Session = Depends(GetDataBase),
+    data_base: Session = Depends(get_data_base),
     page: int = 0,
     size: int = 10,
 ):
@@ -52,7 +52,7 @@ def getTodoList(
 
 @router.get("/detail/{todoId}", response_model=todo_schema.TodoDetail)
 def getTodoDetail1(
-    todoId: int, token=Depends(oauth2_scheme), db: Session = Depends(GetDataBase)
+    todoId: int, token=Depends(oauth2_scheme), db: Session = Depends(get_data_base)
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -79,7 +79,7 @@ def getTodoDetail1(
 
 @router.post("/create", status_code=status.HTTP_204_NO_CONTENT)
 def createTodo(
-    schema: CreateTodo, token=Depends(oauth2_scheme), db: Session = Depends(GetDataBase)
+    schema: CreateTodo, token=Depends(oauth2_scheme), db: Session = Depends(get_data_base)
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -103,7 +103,7 @@ def createTodo(
 
 @router.put("/update", status_code=status.HTTP_204_NO_CONTENT)
 def updateTodo(
-    schema: UpdateTodo, token=Depends(oauth2_scheme), db: Session = Depends(GetDataBase)
+    schema: UpdateTodo, token=Depends(oauth2_scheme), db: Session = Depends(get_data_base)
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -131,7 +131,7 @@ def updateTodo(
 
 @router.delete("/delete", status_code=status.HTTP_204_NO_CONTENT)
 def updateTodo(
-    schema: DeleteTodo, token=Depends(oauth2_scheme), db: Session = Depends(GetDataBase)
+    schema: DeleteTodo, token=Depends(oauth2_scheme), db: Session = Depends(get_data_base)
 ):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,

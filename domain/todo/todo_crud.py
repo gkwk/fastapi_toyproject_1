@@ -33,8 +33,8 @@ def create_todo(data_base: Session, schema: CreateTodo, userId: int):
 
 
 def update_todo(data_base: Session, todo: Todo, schema: UpdateTodo):
-    todo.todo_name = schema.todo_name
-    todo.text = schema.text
+    todo.name = schema.todo_name
+    todo.content = schema.text
     todo.is_finished = schema.is_finished
     todo.update_date = datetime.now()
     data_base.add(todo)
