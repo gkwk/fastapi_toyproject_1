@@ -5,10 +5,10 @@ from models import Todo
 from domain.todo.todo_schema import CreateTodo, UpdateTodo, DeleteTodo
 
 
-def get_todo_list(data_base: Session, userId, skip: int = 0, limit: int = 10):
+def get_todo_list(data_base: Session, user_id: int, skip: int = 0, limit: int = 10):
     todo_list = (
         data_base.query(Todo)
-        .filter_by(user_id=userId)
+        .filter_by(user_id=user_id)
         .order_by(Todo.create_date.desc(), Todo.id.desc())
     )
     total = todo_list.count()
@@ -16,16 +16,16 @@ def get_todo_list(data_base: Session, userId, skip: int = 0, limit: int = 10):
     return (total, todo_list)
 
 
-def get_todo_detail(data_base: Session, userId, todoId):
-    todo_detail = data_base.query(Todo).filter_by(user_id=userId, id=todoId).first()
+def get_todo_detail(data_base: Session, user_id: int, todo_id: int):
+    todo_detail = data_base.query(Todo).filter_by(user_id=user_id, id=todo_id).first()
     return todo_detail
 
 
-def create_todo(data_base: Session, schema: CreateTodo, userId: int):
+def create_todo(data_base: Session, schema: CreateTodo, user_id: int):
     todo = Todo(
-        user_id=userId,
-        todo_name=schema.todo_name,
-        text=schema.text,
+        user_id=user_id,
+        todo_name=schema.name,
+        text=schema.content,
         create_date=datetime.now(),
     )
     data_base.add(todo)
@@ -33,8 +33,8 @@ def create_todo(data_base: Session, schema: CreateTodo, userId: int):
 
 
 def update_todo(data_base: Session, todo: Todo, schema: UpdateTodo):
-    todo.name = schema.todo_name
-    todo.content = schema.text
+    todo.name = schema.name
+    todo.content = schema.content
     todo.is_finished = schema.is_finished
     todo.update_date = datetime.now()
     data_base.add(todo)
