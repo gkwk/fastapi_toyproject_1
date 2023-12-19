@@ -31,7 +31,7 @@ import models
 ```
 - `./migrations/env.py` 에서 `target_metadata`를 아래와 같이 변경
 ```
-target_metadata = models.Base.metadata
+target_metadata = models.base.metadata
 ```
 - 터미널에서 아래의 명령어 입력
 ```bash

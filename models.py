@@ -23,8 +23,8 @@ class Todo(base):
     user_id = Column(Integer, ForeignKey("user.id"))
     user = relationship("User", backref="Todos")
 
-    todo_name = Column(Text, nullable=False)
-    text = Column(String, nullable=False, default="")
+    name = Column(Text, nullable=False)
+    content = Column(String, nullable=False, default="")
     create_date = Column(DateTime, nullable=False)
     update_date = Column(DateTime, nullable=True)
     is_finished = Column(Boolean, nullable=False, default=False)
