@@ -6,25 +6,25 @@ from sqlalchemy.orm import Session
 from starlette import status
 from jose import jwt, JWTError
 
-from database import get_db
+from database import GetDataBase
 from models import Todo, User
 from domain.user import user_schema, user_crud
-from domain.user.user_crud import passwordContext
-from config import getSettings
+from domain.user.user_crud import password_context
+from config import get_settings
 
 router = APIRouter(
     prefix="/api/user",
 )
 
 ACCESS_TOKEN_EXPIRE_MINUTES = 60 * 24
-SECRET_KEY = getSettings().APP_JWT_SECRET_KEY
+SECRET_KEY = get_settings().APP_JWT_SECRET_KEY
 ALGORITHM = "HS256"
 oauth2Scheme = OAuth2PasswordBearer(tokenUrl="/api/user/login")
 
 
 @router.get("/detail", response_model=user_schema.UserDetail)
-def getUserDetail(token=Depends(oauth2Scheme), db: Session = Depends(get_db)):
-    credentialsException = HTTPException(
+def get_user_detail(token=Depends(oauth2Scheme), db: Session = Depends(GetDataBase)):
+    credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="토큰이 유효하지 않습니다.",
         headers={"WWW-Authenticate": "Bearer"},
@@ -34,34 +34,37 @@ def getUserDetail(token=Depends(oauth2Scheme), db: Session = Depends(get_db)):
         name: str = payload.get("name")
         id: int = payload.get("userId")
         if (name is None) or (id is None):
-            raise credentialsException
+            raise credentials_exception
     except JWTError:
-        raise credentialsException
+        raise credentials_exception
     else:
-        userDetail = user_crud.getUserDetail(db, userName=name, userId=id)
+        userDetail = user_crud.get_user_detail(db, userName=name, userId=id)
         if userDetail is None:
-            raise credentialsException
+            raise credentials_exception
 
     return userDetail
 
 
 @router.post("/register", status_code=status.HTTP_204_NO_CONTENT)
-def registerUser(userCreate: user_schema.UserCreate, db: Session = Depends(get_db)):
-    if user_crud.doesUserAlreadyExist(db=db, userCreate=userCreate):
+def register_user(
+    user_create: user_schema.UserCreate, db: Session = Depends(GetDataBase)
+):
+    if user_crud.does_user_already_exist(data_base=db, user_create=user_create):
         raise HTTPException(
             status_code=status.HTTP_409_CONFLICT,
             detail="동일한 이름 혹은 이메일을 사용중인 사용자가 이미 존재합니다.",
         )
-    user_crud.createUser(db=db, userCreate=userCreate)
+    user_crud.create_user(data_base=db, user_create=user_create)
 
 
 @router.post("/login", response_model=user_schema.UserToken)
-def loginUser(
-    formData: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)
+def login_user(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    data_base: Session = Depends(GetDataBase),
 ):
-    user = user_crud.getUser(db, formData.username)
+    user = user_crud.get_user(data_base, form_data.username)
 
-    if not user or not passwordContext.verify(formData.password, user.password):
+    if not user or not password_context.verify(form_data.password, user.password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="유저 이름 혹은 패스워드가 일치하지 않습니다.",
@@ -75,10 +78,10 @@ def loginUser(
         "name": user.name,
         "userId": user.id,
     }
-    accessToken = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
+    access_token = jwt.encode(data, SECRET_KEY, algorithm=ALGORITHM)
 
     return {
-        "access_token": accessToken,
+        "access_token": access_token,
         "tokenType": "bearer",
         "name": user.name,
         "id": user.id,

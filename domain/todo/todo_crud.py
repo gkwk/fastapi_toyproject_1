@@ -5,42 +5,42 @@ from models import Todo
 from domain.todo.todo_schema import CreateTodo, UpdateTodo, DeleteTodo
 
 
-def getTodoList(db: Session, userId, skip: int = 0, limit: int = 10):
-    todoList = (
-        db.query(Todo)
+def get_todo_list(data_base: Session, userId, skip: int = 0, limit: int = 10):
+    todo_list = (
+        data_base.query(Todo)
         .filter_by(user_id=userId)
         .order_by(Todo.create_date.desc(), Todo.id.desc())
     )
-    total = todoList.count()
-    todoList = todoList.offset(skip).limit(limit).all()
-    return (total, todoList)
+    total = todo_list.count()
+    todo_list = todo_list.offset(skip).limit(limit).all()
+    return (total, todo_list)
 
 
-def getTodoDetail(db: Session, userId, todoId):
-    todoDetail = db.query(Todo).filter_by(user_id=userId, id=todoId).first()
-    return todoDetail
+def get_todo_detail(data_base: Session, userId, todoId):
+    todo_detail = data_base.query(Todo).filter_by(user_id=userId, id=todoId).first()
+    return todo_detail
 
 
-def createTodo(db: Session, schema: CreateTodo, userId: int):
+def create_todo(data_base: Session, schema: CreateTodo, userId: int):
     todo = Todo(
         user_id=userId,
         todo_name=schema.todo_name,
         text=schema.text,
         create_date=datetime.now(),
     )
-    db.add(todo)
-    db.commit()
+    data_base.add(todo)
+    data_base.commit()
 
 
-def updateTodo(db: Session, todo: Todo, schema: UpdateTodo):
+def update_todo(data_base: Session, todo: Todo, schema: UpdateTodo):
     todo.todo_name = schema.todo_name
     todo.text = schema.text
     todo.is_finished = schema.is_finished
     todo.update_date = datetime.now()
-    db.add(todo)
-    db.commit()
+    data_base.add(todo)
+    data_base.commit()
 
 
-def deleteTodo(db: Session, todo: Todo, schema: DeleteTodo):
-    db.delete(todo)
-    db.commit()
+def delete_todo(data_base: Session, todo: Todo, schema: DeleteTodo):
+    data_base.delete(todo)
+    data_base.commit()

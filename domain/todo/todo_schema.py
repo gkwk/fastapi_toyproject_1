@@ -34,7 +34,7 @@ class CreateTodo(BaseModel):
     text: str
 
     @field_validator("todo_name", "text")
-    def isNotEmpty(cls, value: str):
+    def is_not_empty(cls, value: str):
         if not value.strip():
             raise ValueError("값이 공백일 수 없습니다.")
         return value

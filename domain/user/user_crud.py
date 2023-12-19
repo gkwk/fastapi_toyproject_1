@@ -5,33 +5,33 @@ from passlib.context import CryptContext
 from models import User
 from domain.user.user_schema import UserDetail, UserCreate
 
-passwordContext = CryptContext(schemes=["bcrypt"])
+password_context = CryptContext(schemes=["bcrypt"])
 
 
-def doesUserAlreadyExist(db: Session, userCreate: UserCreate):
+def does_user_already_exist(data_base: Session, user_create: UserCreate):
     return (
-        db.query(User)
-        .filter((User.name == userCreate.name) | (User.email == userCreate.email))
+        data_base.query(User)
+        .filter((User.name == user_create.name) | (User.email == user_create.email))
         .first()
     )
 
 
-def createUser(db: Session, userCreate: UserCreate):
+def create_user(data_base: Session, user_create: UserCreate):
     user = User(
-        name=userCreate.name,
-        password=passwordContext.hash(userCreate.password1),
+        name=user_create.name,
+        password=password_context.hash(user_create.password1),
         join_date=datetime.now(),
-        email=userCreate.email,
+        email=user_create.email,
     )
-    db.add(user)
-    db.commit()
+    data_base.add(user)
+    data_base.commit()
 
 
-def getUser(db: Session, name: str):
-    user = db.query(User).filter(User.name == name).first()
+def get_user(data_base: Session, name: str):
+    user = data_base.query(User).filter(User.name == name).first()
     return user
 
 
-def getUserDetail(db: Session, userId, userName):
-    userDetail = db.query(User).filter_by(id=userId, name=userName).first()
-    return userDetail
+def get_user_detail(data_base: Session, userId, userName):
+    user_detail = data_base.query(User).filter_by(id=userId, name=userName).first()
+    return user_detail

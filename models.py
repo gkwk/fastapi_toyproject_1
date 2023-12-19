@@ -1,10 +1,10 @@
 from sqlalchemy import Column, Integer, String, Text, DateTime, Boolean, ForeignKey
 from sqlalchemy.orm import relationship
 
-from database import Base
+from database import base
 
 
-class User(Base):
+class User(base):
     __tablename__ = "user"
 
     id = Column(Integer, primary_key=True)
@@ -16,7 +16,7 @@ class User(Base):
     email = Column(String, unique=True, nullable=False)
 
 
-class Todo(Base):
+class Todo(base):
     __tablename__ = "todo"
 
     id = Column(Integer, primary_key=True)

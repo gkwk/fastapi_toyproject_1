@@ -13,13 +13,13 @@ class UserCreate(BaseModel):
     email: EmailStr
 
     @field_validator("name", "password1", "password2", "email")
-    def isNotEmpty(cls, value: str):
+    def is_not_empty(cls, value: str):
         if not value.strip():
             raise ValueError("값이 공백일 수 없습니다.")
         return value
 
     @field_validator("password2")
-    def passwordConfirm(cls, value, info: FieldValidationInfo):
+    def password_confirm(cls, value, info: FieldValidationInfo):
         # print(info) ValidationInfo(config={'title': 'UserCreate'}, context=None, data={'name': 'string', 'password1': 'string'}, field_name='password2')
         if "password1" in info.data and value != info.data["password1"]:
             raise ValueError("비밀번호가 일치하지 않습니다")

@@ -7,9 +7,9 @@ SQLALCHEMY_DATABASE_URL = "sqlite:///./todo.db"
 engine = create_engine(
     SQLALCHEMY_DATABASE_URL, connect_args={"check_same_thread": False}
 )
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+session_local = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-Base = declarative_base()
+base = declarative_base()
 
 # SQLite 버그 패치
 naming_convention = {
@@ -19,12 +19,12 @@ naming_convention = {
     "fk": "fk_%(table_name)s_%(column_0_name)s_%(referred_table_name)s",
     "pk": "pk_%(table_name)s",
 }
-Base.metadata = MetaData(naming_convention=naming_convention)
+base.metadata = MetaData(naming_convention=naming_convention)
 
 
-def get_db():
-    db = SessionLocal()
+def GetDataBase():
+    data_base = session_local()
     try:
-        yield db
+        yield data_base
     finally:
-        db.close()
+        data_base.close()
