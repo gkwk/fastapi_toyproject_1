@@ -29,9 +29,9 @@ class UserCreate(BaseModel):
 class UserToken(BaseModel):
     # 규칙에 따라 access_token은 access_token으로 두어야 한다.
     access_token: str
-    tokenType: str
-    name: str
-    id: int
+    token_type: str
+    user_name: str
+    user_id: int
 
 
 class UserDetail(BaseModel):
