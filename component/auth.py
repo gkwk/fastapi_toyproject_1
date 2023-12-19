@@ -31,9 +31,11 @@ def generate_user_token(
     form_data: OAuth2PasswordRequestForm = Depends(),
     data_base: Session = Depends(get_data_base),
 ):
-    user = user_crud.get_user(data_base=data_base, name=form_data.username)
+    user = user_crud.get_user(data_base=data_base, user_name=form_data.username)
 
-    if (user is None) or (not password_context.verify(form_data.password, user.password)):
+    if (not user) or (
+        not get_password_context().verify(form_data.password, user.password)
+    ):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="유저 이름 혹은 패스워드가 일치하지 않습니다.",
@@ -73,9 +75,9 @@ def check_user_token(
         raise credentials_exception
     else:
         user_detail = user_crud.get_user_detail(
-            data_base, userName=user_name, userId=user_id
+            data_base, user_name=user_name, user_id=user_id
         )
         if user_detail is None:
             raise credentials_exception
 
-    return True
+    return {"user_name": user_name, "user_id": user_id}
