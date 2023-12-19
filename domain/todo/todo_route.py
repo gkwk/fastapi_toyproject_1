@@ -25,7 +25,7 @@ def get_todo_list(
     )
 
     if not (todoList is None):
-        return {"total": total, "todoList": todoList}
+        return {"total": total, "todo_list": todoList}
     else:
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, detail="데이터를 찾을수 없습니다."
