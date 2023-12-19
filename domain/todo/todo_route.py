@@ -14,7 +14,7 @@ router = APIRouter(
 
 @router.get("/list", response_model=todo_schema.TotalTodoList)
 def get_todo_list(
-    token=Depends(get_oauth2_scheme),
+    token=Depends(get_oauth2_scheme()),
     data_base: Session = Depends(get_data_base),
     page: int = 0,
     size: int = 10,
@@ -35,7 +35,7 @@ def get_todo_list(
 @router.get("/detail/{todo_id}", response_model=todo_schema.TodoDetail)
 def get_todo_detail(
     todo_id: int,
-    token=Depends(get_oauth2_scheme),
+    token=Depends(get_oauth2_scheme()),
     data_base: Session = Depends(get_data_base),
 ):
     data = check_user_token(token=token, data_base=data_base)
@@ -54,7 +54,7 @@ def get_todo_detail(
 @router.post("/create", status_code=status.HTTP_204_NO_CONTENT)
 def create_todo(
     schema: CreateTodo,
-    token=Depends(get_oauth2_scheme),
+    token=Depends(get_oauth2_scheme()),
     data_base: Session = Depends(get_data_base),
 ):
     data = check_user_token(token=token, data_base=data_base)
@@ -64,7 +64,7 @@ def create_todo(
 @router.put("/update", status_code=status.HTTP_204_NO_CONTENT)
 def update_todo(
     schema: UpdateTodo,
-    token=Depends(get_oauth2_scheme),
+    token=Depends(get_oauth2_scheme()),
     data_base: Session = Depends(get_data_base),
 ):
     data = check_user_token(token=token, data_base=data_base)
@@ -83,7 +83,7 @@ def update_todo(
 @router.delete("/delete", status_code=status.HTTP_204_NO_CONTENT)
 def update_todo(
     schema: DeleteTodo,
-    token=Depends(get_oauth2_scheme),
+    token=Depends(get_oauth2_scheme()),
     data_base: Session = Depends(get_data_base),
 ):
     data = check_user_token(token=token, data_base=data_base)
