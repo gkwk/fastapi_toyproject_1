@@ -7,7 +7,7 @@ class TodoList(BaseModel):
     id: int
     user_id: int
 
-    todo_name: str
+    name: str
     create_date: datetime.datetime
     update_date: datetime.datetime | None
     is_finished: bool = False
@@ -15,25 +15,25 @@ class TodoList(BaseModel):
 
 class TotalTodoList(BaseModel):
     total: int
-    todoList: list[TodoList]
+    todo_list: list[TodoList]
 
 
 class TodoDetail(BaseModel):
     id: int
     user_id: int
 
-    todo_name: str
-    text: str
+    name: str
+    content: str
     create_date: datetime.datetime
     update_date: datetime.datetime | None
     is_finished: bool = False
 
 
 class CreateTodo(BaseModel):
-    todo_name: str
-    text: str
+    name: str
+    content: str
 
-    @field_validator("todo_name", "text")
+    @field_validator("name", "content")
     def is_not_empty(cls, value: str):
         if not value.strip():
             raise ValueError("값이 공백일 수 없습니다.")
@@ -41,9 +41,9 @@ class CreateTodo(BaseModel):
 
 
 class UpdateTodo(CreateTodo):
-    todoId: int
+    id: int
     is_finished: bool = False
 
 
 class DeleteTodo(BaseModel):
-    todoId: int
+    id: int
