@@ -4,7 +4,9 @@ from sqlalchemy.orm import Session
 
 from models import User
 from domain.user.user_schema import UserCreate
-from component.auth import get_password_context
+from passlib.context import CryptContext
+
+password_context = CryptContext(schemes=["bcrypt"])
 
 
 def does_user_already_exist(data_base: Session, user_create: UserCreate):
@@ -18,7 +20,7 @@ def does_user_already_exist(data_base: Session, user_create: UserCreate):
 def create_user(data_base: Session, user_create: UserCreate):
     user = User(
         name=user_create.name,
-        password=get_password_context().hash(user_create.password1),
+        password=password_context.hash(user_create.password1),
         join_date=datetime.now(),
         email=user_create.email,
     )
