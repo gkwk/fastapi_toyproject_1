@@ -31,7 +31,6 @@ class UserToken(BaseModel):
     access_token: str
     token_type: str
     user_name: str
-    user_id: int
 
 
 class UserDetail(BaseModel):
