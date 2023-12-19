@@ -13,7 +13,7 @@ router = APIRouter(
 
 
 @router.get("/list", response_model=todo_schema.TotalTodoList)
-def getTodoList(
+def get_todo_list(
     token=Depends(get_oauth2_scheme),
     data_base: Session = Depends(get_data_base),
     page: int = 0,
@@ -33,7 +33,7 @@ def getTodoList(
 
 
 @router.get("/detail/{todo_id}", response_model=todo_schema.TodoDetail)
-def getTodoDetail1(
+def get_todo_detail(
     todo_id: int,
     token=Depends(get_oauth2_scheme),
     data_base: Session = Depends(get_data_base),
@@ -52,7 +52,7 @@ def getTodoDetail1(
 
 
 @router.post("/create", status_code=status.HTTP_204_NO_CONTENT)
-def createTodo(
+def create_todo(
     schema: CreateTodo,
     token=Depends(get_oauth2_scheme),
     data_base: Session = Depends(get_data_base),
@@ -62,7 +62,7 @@ def createTodo(
 
 
 @router.put("/update", status_code=status.HTTP_204_NO_CONTENT)
-def updateTodo(
+def update_todo(
     schema: UpdateTodo,
     token=Depends(get_oauth2_scheme),
     data_base: Session = Depends(get_data_base),
@@ -81,7 +81,7 @@ def updateTodo(
 
 
 @router.delete("/delete", status_code=status.HTTP_204_NO_CONTENT)
-def updateTodo(
+def update_todo(
     schema: DeleteTodo,
     token=Depends(get_oauth2_scheme),
     data_base: Session = Depends(get_data_base),
