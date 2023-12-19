@@ -24,8 +24,8 @@ def get_todo_detail(data_base: Session, user_id: int, todo_id: int):
 def create_todo(data_base: Session, schema: CreateTodo, user_id: int):
     todo = Todo(
         user_id=user_id,
-        todo_name=schema.name,
-        text=schema.content,
+        name=schema.name,
+        content=schema.content,
         create_date=datetime.now(),
     )
     data_base.add(todo)
